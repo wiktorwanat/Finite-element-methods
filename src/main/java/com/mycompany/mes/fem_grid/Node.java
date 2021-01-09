@@ -5,6 +5,8 @@
  */
 package com.mycompany.mes.fem_grid;
 
+import com.mycompany.mes.dataObjects.Global_data;
+
 /**
  *
  * @author Wiktor
@@ -22,11 +24,13 @@ public class Node {
         this.id=id;
         this.x=x;
         this.y=y;
+        BCCondition();
     }
     
     public Node(double x,double y){
         this.x=x;
         this.y=y;
+        BCCondition();
     }
         
     /**
@@ -93,4 +97,10 @@ public class Node {
     public String toString() {
         return "Node id="+id+"{" + "x=" + x + ", y=" + y + '}';
     }
+    
+        public void BCCondition(){
+                if(this.getX()==0.0 || this.getY()==0.0 || this.getX()==Global_data.W || this.getY()==Global_data.H){
+                    this.setBC(1);
+                }
+        }
 }

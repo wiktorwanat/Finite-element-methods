@@ -21,7 +21,6 @@ public class FEM_GRID extends Global_data{
         this.nodeTab=new ArrayList();
         this.elementTab=new ArrayList();
         createGrid();
-        BCCondition();
     }
 
 
@@ -109,13 +108,4 @@ public class FEM_GRID extends Global_data{
         }
     }
     
-    public void BCCondition(){
-        if(this.nodeTab!=null){
-            for(Node n:this.nodeTab){
-                if(n.getX()==0.0 || n.getY()==0.0 || n.getX()==Global_data.W || n.getY()==Global_data.H){
-                    n.setBC(1);
-                }
-            }
-        }
-    }
 }

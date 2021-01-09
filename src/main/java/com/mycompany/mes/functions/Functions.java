@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Wiktor
  */
-public class MatrixMethod {
+public class Functions {
         
     public static void printWholeMatrix(double [][] tab)
     {
@@ -38,6 +38,15 @@ public class MatrixMethod {
             out=null;
         }
         return out;
+    }
+    
+    public static void printVector(double[] tab) {
+        System.out.print("[");
+        for (int i = 0; i < tab.length; i++) {
+             System.out.print(tab[i]+",");
+        }
+        System.out.println("]");
+
     }
     
     public static List detI(List<Double[][]> matrix){

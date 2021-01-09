@@ -8,7 +8,7 @@ package com.mycompany.mes.main;
 import com.mycompany.mes.fem_grid.Element;
 import com.mycompany.mes.fem_grid.FEM_GRID;
 import com.mycompany.mes.dataObjects.Elem4;
-import com.mycompany.mes.functions.MatrixMethod;
+import com.mycompany.mes.functions.Functions;
 import com.mycompany.mes.fem_grid.SOE;
 
 /**
@@ -22,9 +22,7 @@ public class Main {
         FEM_GRID grid=new FEM_GRID();
         System.out.println("----------------------------------");
         SOE soe=new SOE(grid);
-                System.out.println("----------------------------------");
-        MatrixMethod.printWholeMatrix(MatrixMethod.N());
-        
+        System.out.println("----------------------------------");
      }
 }     
 

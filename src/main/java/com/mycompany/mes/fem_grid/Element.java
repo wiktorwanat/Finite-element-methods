@@ -7,7 +7,7 @@ package com.mycompany.mes.fem_grid;
 
 import com.mycompany.mes.dataObjects.Global_data;
 import com.mycompany.mes.dataObjects.Elem4;
-import com.mycompany.mes.functions.MatrixMethod;
+import com.mycompany.mes.functions.Functions;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +79,7 @@ public class Element {
     
     public void setH() {
         List<Double[][]> elementJacobian=calculateJakobian();
-        List<Double> jacobianDet=MatrixMethod.detI(elementJacobian);
+        List<Double> jacobianDet=Functions.detI(elementJacobian);
         double[][] DN_Dx=DN_Dx(Global_data.elem4.matrixDN_Deta, elementJacobian,Global_data.elem4.matrixDN_Dksi,jacobianDet);
         double[][] DN_Dy=DN_Dy(Global_data.elem4.matrixDN_Deta, elementJacobian,Global_data.elem4.matrixDN_Dksi,jacobianDet);
         
@@ -89,9 +89,9 @@ public class Element {
     }
     
     public void setC(){     
-        double[][] N=MatrixMethod.N();
+        double[][] N=Functions.N();
         List<Double[][]> elementJacobian=calculateJakobian();
-        List<Double> jacobianDet=MatrixMethod.detI(elementJacobian);
+        List<Double> jacobianDet=Functions.detI(elementJacobian);
         double[][] localC=calculateCForElement(N,jacobianDet);
         this.C=localC;
     }
@@ -107,10 +107,14 @@ public class Element {
         this.nodes.add(d);
         setH();
         setC();
-        calculateHbc(elem4);
-        double[][] Hlbc=MatrixMethod.addMatrix(getH(),calculateHbc(new Elem4()));
+        double[][] Hbc=calculateHbc(elem4);
+        Functions.printWholeMatrix(Hbc);
+        
+        double[][] Hlbc=Functions.addMatrix(getH(),Hbc);
         setHlbc(Hlbc);
-        setP(calculateP(elem4));
+        double[] pl=calculateP(elem4);
+        //Functions.printVector(pl);
+        setP(pl);
     }
 
     
@@ -157,26 +161,26 @@ public class Element {
                 }
             if(Global_data.iPc==2){
                 if(partialH.size()==4){
-                     out=MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(0), partialH.get(1)), MatrixMethod.addMatrix(partialH.get(2), partialH.get(3)));
+                     out=Functions.addMatrix(Functions.addMatrix(partialH.get(0), partialH.get(1)), Functions.addMatrix(partialH.get(2), partialH.get(3)));
                 }
             }else if(Global_data.iPc==3){
                 if(partialH.size()==9){
-                    double[][] h_1=MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(0), partialH.get(1)), MatrixMethod.addMatrix(partialH.get(2), partialH.get(3)));
-                    double[][] h_2=MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(4), partialH.get(5)), MatrixMethod.addMatrix(partialH.get(6), partialH.get(7)));
+                    double[][] h_1=Functions.addMatrix(Functions.addMatrix(partialH.get(0), partialH.get(1)), Functions.addMatrix(partialH.get(2), partialH.get(3)));
+                    double[][] h_2=Functions.addMatrix(Functions.addMatrix(partialH.get(4), partialH.get(5)), Functions.addMatrix(partialH.get(6), partialH.get(7)));
                     
-                    double[][] h_11=MatrixMethod.addMatrix(partialH.get(8),h_1);
+                    double[][] h_11=Functions.addMatrix(partialH.get(8),h_1);
                     
-                     out=MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(2), partialH.get(3)), h_11);
+                     out=Functions.addMatrix(Functions.addMatrix(partialH.get(2), partialH.get(3)), h_11);
                 }
             }else if(Global_data.iPc==4){
                 if(partialH.size()==16){
-                double[][] H12 = MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(0), partialH.get(1)), MatrixMethod.addMatrix(partialH.get(2), partialH.get(3)));
-                double[][] H34 = MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(4), partialH.get(5)), MatrixMethod.addMatrix(partialH.get(6), partialH.get(7)));
-                double[][] H56 = MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(8), partialH.get(9)), MatrixMethod.addMatrix(partialH.get(10), partialH.get(11)));
-                double[][] H78 = MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(12), partialH.get(13)), MatrixMethod.addMatrix(partialH.get(14), partialH.get(15)));
+                double[][] H12 = Functions.addMatrix(Functions.addMatrix(partialH.get(0), partialH.get(1)), Functions.addMatrix(partialH.get(2), partialH.get(3)));
+                double[][] H34 = Functions.addMatrix(Functions.addMatrix(partialH.get(4), partialH.get(5)), Functions.addMatrix(partialH.get(6), partialH.get(7)));
+                double[][] H56 = Functions.addMatrix(Functions.addMatrix(partialH.get(8), partialH.get(9)), Functions.addMatrix(partialH.get(10), partialH.get(11)));
+                double[][] H78 = Functions.addMatrix(Functions.addMatrix(partialH.get(12), partialH.get(13)), Functions.addMatrix(partialH.get(14), partialH.get(15)));
                 
 
-                out=MatrixMethod.addMatrix(MatrixMethod.addMatrix(H12,H34),MatrixMethod.addMatrix(H56,H78));
+                out=Functions.addMatrix(Functions.addMatrix(H12,H34),Functions.addMatrix(H56,H78));
                 }
             }
          }else{
@@ -304,26 +308,26 @@ public class Element {
             
             if(Global_data.iPc==2){
                 if(partialH.size()==4){
-                     out=MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(0), partialH.get(1)), MatrixMethod.addMatrix(partialH.get(2), partialH.get(3)));
+                     out=Functions.addMatrix(Functions.addMatrix(partialH.get(0), partialH.get(1)), Functions.addMatrix(partialH.get(2), partialH.get(3)));
                 }
             }else if(Global_data.iPc==3){
                 if(partialH.size()==9){
-                    double[][] h_1=MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(0), partialH.get(1)), MatrixMethod.addMatrix(partialH.get(2), partialH.get(3)));
-                    double[][] h_2=MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(4), partialH.get(5)), MatrixMethod.addMatrix(partialH.get(6), partialH.get(7)));
+                    double[][] h_1=Functions.addMatrix(Functions.addMatrix(partialH.get(0), partialH.get(1)), Functions.addMatrix(partialH.get(2), partialH.get(3)));
+                    double[][] h_2=Functions.addMatrix(Functions.addMatrix(partialH.get(4), partialH.get(5)), Functions.addMatrix(partialH.get(6), partialH.get(7)));
                     
-                    double[][] h_11=MatrixMethod.addMatrix(partialH.get(8),h_1);
+                    double[][] h_11=Functions.addMatrix(partialH.get(8),h_1);
                     
-                     out=MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(2), partialH.get(3)), h_11);
+                     out=Functions.addMatrix(Functions.addMatrix(partialH.get(2), partialH.get(3)), h_11);
                 }
             }else if(Global_data.iPc==4){
                 if(partialH.size()==16){
-                double[][] H12 = MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(0), partialH.get(1)), MatrixMethod.addMatrix(partialH.get(2), partialH.get(3)));
-                double[][] H34 = MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(4), partialH.get(5)), MatrixMethod.addMatrix(partialH.get(6), partialH.get(7)));
-                double[][] H56 = MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(8), partialH.get(9)), MatrixMethod.addMatrix(partialH.get(10), partialH.get(11)));
-                double[][] H78 = MatrixMethod.addMatrix(MatrixMethod.addMatrix(partialH.get(12), partialH.get(13)), MatrixMethod.addMatrix(partialH.get(14), partialH.get(15)));
+                double[][] H12 = Functions.addMatrix(Functions.addMatrix(partialH.get(0), partialH.get(1)), Functions.addMatrix(partialH.get(2), partialH.get(3)));
+                double[][] H34 = Functions.addMatrix(Functions.addMatrix(partialH.get(4), partialH.get(5)), Functions.addMatrix(partialH.get(6), partialH.get(7)));
+                double[][] H56 = Functions.addMatrix(Functions.addMatrix(partialH.get(8), partialH.get(9)), Functions.addMatrix(partialH.get(10), partialH.get(11)));
+                double[][] H78 = Functions.addMatrix(Functions.addMatrix(partialH.get(12), partialH.get(13)), Functions.addMatrix(partialH.get(14), partialH.get(15)));
                 
 
-                out=MatrixMethod.addMatrix(MatrixMethod.addMatrix(H12,H34),MatrixMethod.addMatrix(H56,H78));
+                out=Functions.addMatrix(Functions.addMatrix(H12,H34),Functions.addMatrix(H56,H78));
                 }
             }
          }else{

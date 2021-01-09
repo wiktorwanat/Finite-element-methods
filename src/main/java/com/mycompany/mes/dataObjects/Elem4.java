@@ -7,7 +7,7 @@ package com.mycompany.mes.dataObjects;
 
 import com.mycompany.mes.dataObjects.Global_data;
 import com.mycompany.mes.fem_grid.Node;
-import com.mycompany.mes.functions.MatrixMethod;
+import com.mycompany.mes.functions.Functions;
 import java.util.ArrayList;
 import java.util.List;
 
