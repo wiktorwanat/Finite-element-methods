@@ -5,12 +5,8 @@
  */
 package com.mycompany.mes.fem_grid;
 
-import com.mycompany.mes.dataObjects.Elem4;
-import com.mycompany.mes.fem_grid.Element;
-import com.mycompany.mes.fem_grid.FEM_GRID;
+import com.mycompany.mes.dataObjects.Global_data;
 import com.mycompany.mes.functions.Functions;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -21,6 +17,7 @@ public class SOE {
     private static double[][] CG;
     private static double[][] HLbc;
     private static double[] PG;
+    
 
     
     public SOE(FEM_GRID grid){
@@ -77,6 +74,7 @@ public class SOE {
     }
     
     
+    
     public static double[][] calculateHG(FEM_GRID grid){
        double[][] hg=new double[16][16];
        for(Element e:grid.getElementTab()){
@@ -90,7 +88,6 @@ public class SOE {
     }
     
     public static double[][] calculateCG(FEM_GRID grid){
-       System.out.println("CG");
        double[][] cg=new double[16][16];
        for(Element e:grid.getElementTab()){
             for (int i = 0; i < 4; i++) {
@@ -103,7 +100,6 @@ public class SOE {
     }
     
         public static double[][] calculateHlbc(FEM_GRID grid){
-       System.out.println("Hlbg");
        double[][] hglbc=new double[16][16];
        for(Element e:grid.getElementTab()){
             for (int i = 0; i < 4; i++) {
@@ -116,14 +112,38 @@ public class SOE {
     }
         
     public static double[] calculatePG(FEM_GRID grid){
-       System.out.println("PG");
        double[] pg=new double[16];
        for(Element e:grid.getElementTab()){
             for (int i = 0; i < 4; i++) {
-                System.out.println(e.getP()[i]);
                     pg[e.getNodes().get(i).getId()]+=e.getP()[i];
             }
         }
         return pg;
+    }
+    
+    
+    public double[] Pz(double iteration,double[] t){
+    double []Pz=new double[Global_data.nN];
+    double []Ct=new double[Global_data.nN];
+     for (int i=0;i<Global_data.nN;i++)
+        for (int j=0;j<Global_data.nN;j++)
+            Ct[i]+=t[j]*(CG[i][j]/iteration);
+        for (int i=0;i<Global_data.nN;i++) {
+            Pz[i] = Math.abs(PG[i]) + Ct[i];
+        }
+    return Pz;
+    }
+    
+    public double[][] Hz(double iteration){
+        System.out.println(Global_data.nN);
+        double [][] Hz=new double[Global_data.nN][Global_data.nN];
+        for (int k=0;k<Global_data.nN;k++){
+            for (int l=0;l<Global_data.nN;l++){
+                Hz[k][l]+=HLbc[k][l]+(CG[k][l]/iteration);
+            }
+        }
+        return Hz;
+        
+
     }
 }

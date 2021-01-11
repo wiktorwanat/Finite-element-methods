@@ -34,10 +34,11 @@ public class Elem4{
     public double [] HbcKsi;
     public double [] HbcEta;
     public double [][] Nbc;
-    public int size;
+    public int nShapeFunctions;
     
         
     public Elem4(){
+        this.nShapeFunctions=4;
         
         if(Global_data.iPc==2){
             System.out.println("iPc =2 - 2 POINT METHOD");
@@ -67,8 +68,7 @@ public class Elem4{
             this.HbcWeights=new double[]{1,1};
             this.HbcKsi=new double[]{-value,value,1.0,1.0,value,-value,-1.0,-1.0};        
             this.HbcEta=new double[]{-1.0,-1.0,-value,value,1.0,1.0,value,-value};
-            this.size=8;
-            this.Nbc=new double[4][size];
+            this.Nbc=new double[4][Global_data.iPc*nShapeFunctions];
             
         }else if(Global_data.iPc==3){
             
@@ -108,8 +108,7 @@ public class Elem4{
             this.HbcWeights=new double[]{5.0/9.0, 8.0 / 9.0, 5.0 / 9.0};
             this.HbcKsi=new double[]{-value, 0, value, 1, 1, 1, value, 0, -value, -1, -1, -1 };        
             this.HbcEta=new double[]{-1.0,-1.0,-1.0, -value, 0, value, 1, 1, 1, value, 0, -value};
-            this.size=12;
-            this.Nbc=new double[4][size];
+            this.Nbc=new double[4][Global_data.iPc*nShapeFunctions];
         }else if(Global_data.iPc==4){
             System.out.println("iPc =4 - 4 POINT METHOD");
             //this.value=Math.sqrt(3/7-(2*Math.sqrt(6.0/5.0)/7));
@@ -167,8 +166,7 @@ public class Elem4{
             this.HbcWeights=new double[]{v1,v2,v2,v1};
             this.HbcKsi=new double[]{ -valF, -valS, valS, valF, 1, 1, 1, 1, valF, valS, -valS, -valF, -1, -1, -1, -1 };        
             this.HbcEta=new double[]{ -1, -1, -1, -1, -valF, -valS, valS, valF, 1, 1, 1, 1, valF, valS, -valS, -valF };
-            this.size=16;
-            this.Nbc=new double[4][size];
+            this.Nbc=new double[4][Global_data.iPc*nShapeFunctions];
         }
         /*
         System.out.println("Creating 4 node element");
@@ -225,28 +223,21 @@ public class Elem4{
     }
     
     private void calcualteNbc(){
-        for (int i = 0; i < this.size; i++)
-        {
-            for (int j = 0; j <4; j++)
-            {
-                if (j == 0)
-                {
-                   this.Nbc[j][i] = (0.25) * ((1.0 - this.HbcKsi[i]) * (1.0 - this.HbcEta[i]));
+        for (int k = 0; k < this.nShapeFunctions*Global_data.iPc; k++){
+            for (int l = 0; l <4; l++){
+                if (l == 0){
+                   this.Nbc[l][k] = (0.25) * ((1.0-this.HbcKsi[k])*(1.0-this.HbcEta[k]));
                 }
-                else if (j == 1)
-                {
-                    this.Nbc[j][i] = (0.25) * ((1.0 + this.HbcKsi[i]) * (1.0 - this.HbcEta[i]));
+                else if (l == 1){
+                    this.Nbc[l][k] = (0.25) * ((1.0 + this.HbcKsi[k]) * (1.0 - this.HbcEta[k]));
                 }
-                else if (j == 2)
-                {
-                    this.Nbc[j][i] = (0.25) * ((1.0 + this.HbcKsi[i]) * (1.0 + this.HbcEta[i]));
+                else if (l == 2){
+                    this.Nbc[l][k] = (0.25) * ((1.0 + this.HbcKsi[k]) * (1.0 + this.HbcEta[k]));
                 }
-                else if (j == 3)
-                {
-                    this.Nbc[j][i] = (0.25) * ((1.0 - this.HbcKsi[i]) * (1.0 + this.HbcEta[i]));
+                else if (l == 3){
+                    this.Nbc[l][k] = (0.25) * ((1.0 - this.HbcKsi[k]) * (1.0 + this.HbcEta[k]));
                 }
             }
-        }
-        
+        } 
     }
 }

@@ -31,6 +31,11 @@ public abstract class Global_data {
     public static int ro;
     public static int c;
     
+    public static int simulationTime;
+    public static int simulationStepTime;
+    
+    public static int initialTemperature;
+    
     public static Elem4 elem4;
 
     public static int getK() {
@@ -73,7 +78,30 @@ public abstract class Global_data {
     public static void setTalfa(int Talfa) {
         Global_data.Talfa = Talfa;
     }
-    
+
+    public static void setSimulationTime(int simulationTime) {
+        Global_data.simulationTime = simulationTime;
+    }
+
+    public static void setSimulationStepTime(int simulationStepTime) {
+        Global_data.simulationStepTime = simulationStepTime;
+    }
+
+    public static int getSimulationTime() {
+        return simulationTime;
+    }
+
+    public static int getSimulationStepTime() {
+        return simulationStepTime;
+    }
+
+    public static int getInitialTemperature() {
+        return initialTemperature;
+    }
+
+    public static void setInitialTemperature(int initialTemperature) {
+        Global_data.initialTemperature = initialTemperature;
+    }
     
 
     /**
@@ -169,6 +197,7 @@ public abstract class Global_data {
     }
     
     
+    
     public Global_data(){
         readDataFromFile();
         int nN=getnH()*getnW();
@@ -186,6 +215,8 @@ public abstract class Global_data {
         System.out.println("C = "+getC());
         System.out.println("Alfe = "+getAlfa());
         System.out.println("TAlfa = "+getTalfa());
+        System.out.println("simulation time = "+getSimulationTime());
+        System.out.println("simulation step time = "+getSimulationStepTime());
         
         this.elem4=new Elem4();
     }
@@ -202,7 +233,7 @@ public abstract class Global_data {
                 values.add(ss);
             }
             s.close();
-            if(values.size()==9){
+            if(values.size()==12){
                 setH(Double.parseDouble(values.get(0)));
                 
                 setW(Double.parseDouble(values.get(1)));
@@ -220,6 +251,12 @@ public abstract class Global_data {
                 setAlfa(Integer.parseInt(values.get(7)));
                 
                 setTalfa(Integer.parseInt(values.get(8)));
+                
+                setSimulationTime(Integer.parseInt(values.get(9)));
+                
+                setSimulationStepTime(Integer.parseInt(values.get(10)));
+                
+                setInitialTemperature(Integer.parseInt(values.get(11)));
             }
         }catch(FileNotFoundException exc){
                 System.out.println(exc.getMessage());
@@ -231,6 +268,10 @@ public abstract class Global_data {
                 setRo(0);
                 setC(0);
                 setAlfa(0);
+                setSimulationTime(0);
+                setSimulationStepTime(0);
+                setInitialTemperature(0);
+                
         }catch(NullPointerException exc){
             System.out.println(exc.getMessage());
         }

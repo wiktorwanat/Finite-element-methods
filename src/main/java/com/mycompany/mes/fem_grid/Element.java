@@ -338,35 +338,32 @@ public class Element {
     
     private double[][] calculateHbc(Elem4 elem4){
         double[][] Hbc = new double[4][4];
-        double[][][] partialHbc = new double[4][4][4];
+        double[][][] hbc_partial = new double[4][4][4];
  
-        int integrationPointIndex = 0;
-        
-        for (int i = 0; i < 4; i++){
-            int secondIndex = i + 1;
-            if (secondIndex == 4){
-                secondIndex = 0;
+        //
+        int iP = 0;
+        for (int i = 0; i < elem4.nShapeFunctions; i++){
+            int i2 = i + 1;
+            if (i2 == 4){
+                i2 = 0;
             }
-            if (this.nodes.get(i).getBC() == 1 && this.nodes.get(secondIndex).getBC() == 1) {
-                for (int j = 0; j < 4; j++){
+            if (this.nodes.get(i).getBC() == 1 && this.nodes.get(i2).getBC() == 1) {
+                for (int j = 0; j < Global_data.iPc; j++){
                     for (int k = 0; k < 4; k++){
                         for (int l = 0; l < 4; l++){
-                            partialHbc[i][k][l] += (elem4.Nbc[k][integrationPointIndex] * elem4.Nbc[l][integrationPointIndex]) * elem4.weights[j] * Global_data.alfa * calculateL(this.nodes.get(i),this.nodes.get(secondIndex)) / 2;
+                            hbc_partial[i][k][l]+=(elem4.Nbc[k][iP]*elem4.Nbc[l][iP])*elem4.HbcWeights[j]*Global_data.alfa*calculateL(this.nodes.get(i),this.nodes.get(i2)) / 2;
                         }
                     }
-                    integrationPointIndex++;
+                    iP++;
                 }
-            }
-            else
-            {
-                integrationPointIndex += Global_data.iPc;
+            }else{
+                iP += Global_data.iPc;
             }
         }
-
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < 4; j++){
                 for (int k = 0; k < 4; k++){
-                    Hbc[i][j] += partialHbc[k][i][j];
+                    Hbc[i][j] += hbc_partial[k][i][j];
                 }
             }
         }
@@ -378,31 +375,29 @@ public class Element {
     }
     
     public double[] calculateP(Elem4 elem4){
-        double[] P = new double[elem4.size];
-        double[][] P_partial=new double [elem4.size][elem4.size];
-        int integrationPointIndex = 0;
-        for (int i = 0; i < 4; i++)
-        {
-            int secondIndex = i + 1;
-            if (secondIndex == 4){
-                secondIndex = 0;
+        double[] P = new double[elem4.nShapeFunctions];
+        double[][] P_partial=new double [elem4.nShapeFunctions][elem4.nShapeFunctions];
+        //
+        int iP = 0;
+        for (int i = 0; i < elem4.nShapeFunctions; i++){
+            int i2 = i + 1;
+            if (i2 == 4){
+                i2 = 0;
             }
-            if (this.nodes.get(i).getBC() == 1 && this.nodes.get(secondIndex).getBC() == 1) {
+            if (this.nodes.get(i).getBC() == 1 && this.nodes.get(i2).getBC() == 1) {
                 for (int j = 0; j<Global_data.iPc; j++){
                     for (int k = 0; k < 4; k++){
-                        for (int l = 0; l < 4; l++){
-                            P_partial[i][k] += -1*(elem4.Nbc[k][integrationPointIndex] * elem4.weights[j] *  Global_data.alfa * Global_data.Talfa * (calculateL(this.nodes.get(i),this.nodes.get(secondIndex)) / 2));
-                        }
+                            P_partial[i][k]+= -1*(elem4.Nbc[k][iP] * elem4.weights[j] *  Global_data.alfa * Global_data.Talfa * (calculateL(this.nodes.get(i),this.nodes.get(i2)) / 2));
                     }
-                    integrationPointIndex++;
+                    iP++;
                 }
             }
             else{
-                integrationPointIndex += Global_data.iPc;
+                iP += Global_data.iPc;
             }
         }
-        for (int i = 0; i < elem4.size; i++){
-                    for (int j = 0; j < elem4.size; j++){
+        for (int i = 0; i < elem4.nShapeFunctions; i++){
+                    for (int j = 0; j < elem4.nShapeFunctions; j++){
                         P[i] += P_partial[j][i];
                     }
                 }

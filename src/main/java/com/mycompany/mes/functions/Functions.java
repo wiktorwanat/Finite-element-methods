@@ -14,6 +14,8 @@ import java.util.List;
  * @author Wiktor
  */
 public class Functions {
+    
+    private static final double EPSILON = 1e-10;
         
     public static void printWholeMatrix(double [][] tab)
     {
@@ -83,5 +85,73 @@ public class Functions {
             return out;
         }
         
+        public static double findMaxTemp(double[] arr){
+            double max=0;
+            if(arr!=null){
+                max=arr[0];
+                for(double m:arr){
+                    if(max<m){
+                        max=m;
+                    }
+                }
+            }
+            return max;
+        }
+        
+        public static double findMinTemp(double[] arr){
+            double min=0.0;
+            if(arr!=null){
+                min=arr[0];
+                for(double m:arr){
+                    System.out.println(m);
+                    if(min>m){
+                        min=m;
+                    }
+                }
+            }
+            return min;
+        }
+        
+        public static double[] gaussMethod(double[][] Hz,double[] Pz){
+            int n = Pz.length;
+
+            for (int p = 0; p < n; p++) {
+
+                // find pivot row and swap
+                int max = p;
+                for (int i = p + 1; i < n; i++) {
+                    if (Math.abs(Hz[i][p]) > Math.abs(Hz[max][p])) {
+                        max = i;
+                    }
+                }
+                double[] temp = Hz[p]; Hz[p] = Hz[max]; Hz[max] = temp;
+                double   t    = Pz[p]; Pz[p] = Pz[max]; Pz[max] = t;
+
+                // singular or nearly singular
+                if (Math.abs(Hz[p][p]) <= EPSILON) {
+                    throw new ArithmeticException("Matrix is singular or nearly singular");
+                }
+
+                // pivot within A and b
+                for (int i = p + 1; i < n; i++) {
+                    double alpha = Hz[i][p] / Hz[p][p];
+                    Pz[i] -= alpha * Pz[p];
+                    for (int j = p; j < n; j++) {
+                        Hz[i][j] -= alpha * Hz[p][j];
+                    }
+                }
+            }
+
+            // back substitution
+            double[] x = new double[n];
+            for (int i = n - 1; i >= 0; i--) {
+                double sum = 0.0;
+                for (int j = i + 1; j < n; j++) {
+                    sum += Hz[i][j] * x[j];
+                }
+                x[i] = (Pz[i] - sum) / Hz[i][i];
+            }
+            return x;
+        }
         
 }
