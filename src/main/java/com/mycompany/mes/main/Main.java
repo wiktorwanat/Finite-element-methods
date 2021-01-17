@@ -36,19 +36,17 @@ public class Main {
             int iteration=Global_data.simulationTime/Global_data.simulationStepTime;
             double[][] Hz=soe.Hz(Global_data.simulationStepTime);
             System.out.println("----------------------------------");
-            Functions.printWholeMatrix(Hz);
+            //Functions.printWholeMatrix(Hz);
             System.out.println("----------------------------------");
             double[] Pz=soe.Pz(Global_data.simulationStepTime, to);
-            Functions.printVector(Pz);
+            //Functions.printVector(Pz);
             //double[][] Hz=soe.Hz(Global_data.simulationStepTime);
             System.out.println("----------------------------------");
             
             for(int k=0;k<iteration;k++){
                 System.out.println("Iteration nr :"+k);
-                Pz=soe.Pz(Global_data.simulationStepTime, to);
                 
                 to=Functions.gaussMethod(soe.Hz(Global_data.simulationStepTime), soe.Pz(Global_data.simulationStepTime, to));
-                
 
                 double maxTemp=Functions.findMaxTemp(to);
                 double minTemp=Functions.findMinTemp(to);
@@ -58,9 +56,6 @@ public class Main {
                 System.out.println("--------------------");
             }
             
-         //}catch(Exception e){
-          //  System.out.println(e.getMessage());
-        // }
      }
 }     
 

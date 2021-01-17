@@ -27,18 +27,18 @@ public class SOE {
         setHG(calculateHG(grid));
         System.out.println("HG");
         System.out.println("----------------------------------");
-        Functions.printWholeMatrix(getHG());
+        //Functions.printWholeMatrix(getHG());
         setCG(calculateCG(grid));
         System.out.println("CG");
         System.out.println("----------------------------------");
-        Functions.printWholeMatrix(getCG());
+        //Functions.printWholeMatrix(getCG());
         setHLbc(calculateHlbc(grid));
         System.out.println("HLbc");
         System.out.println("----------------------------------");
-        Functions.printWholeMatrix(getHLbc());
+        //Functions.printWholeMatrix(getHLbc());
         setPG(calculatePG(grid));
         System.out.println("----------------------------------");
-        Functions.printVector(getPG());
+        //Functions.printVector(getPG());
     }
 
     public static double[][] getHG() {
@@ -76,7 +76,7 @@ public class SOE {
     
     
     public static double[][] calculateHG(FEM_GRID grid){
-       double[][] hg=new double[16][16];
+       double[][] hg=new double[Global_data.nN][Global_data.nN];
        for(Element e:grid.getElementTab()){
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
@@ -88,7 +88,7 @@ public class SOE {
     }
     
     public static double[][] calculateCG(FEM_GRID grid){
-       double[][] cg=new double[16][16];
+       double[][] cg=new double[Global_data.nN][Global_data.nN];
        for(Element e:grid.getElementTab()){
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
@@ -100,7 +100,7 @@ public class SOE {
     }
     
         public static double[][] calculateHlbc(FEM_GRID grid){
-       double[][] hglbc=new double[16][16];
+       double[][] hglbc=new double[Global_data.nN][Global_data.nN];
        for(Element e:grid.getElementTab()){
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
@@ -112,7 +112,7 @@ public class SOE {
     }
         
     public static double[] calculatePG(FEM_GRID grid){
-       double[] pg=new double[16];
+       double[] pg=new double[Global_data.nN];
        for(Element e:grid.getElementTab()){
             for (int i = 0; i < 4; i++) {
                     pg[e.getNodes().get(i).getId()]+=e.getP()[i];
