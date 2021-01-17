@@ -103,6 +103,7 @@ public class Functions {
             if(arr!=null){
                 min=arr[0];
                 for(double m:arr){
+                    System.out.println(m);
                     if(min>m){
                         min=m;
                     }
