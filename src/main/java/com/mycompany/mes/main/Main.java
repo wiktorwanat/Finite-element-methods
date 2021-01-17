@@ -36,12 +36,11 @@ public class Main {
             int iteration=Global_data.simulationTime/Global_data.simulationStepTime;
             double[][] Hz=soe.Hz(Global_data.simulationStepTime);
             System.out.println("----------------------------------");
-            Functions.printWholeMatrix(Hz);
-            System.out.println("----------------------------------");
+            //Functions.printWholeMatrix(Hz);
+           // System.out.println("----------------------------------");
             double[] Pz=soe.Pz(Global_data.simulationStepTime, to);
-            Functions.printVector(Pz);
-            //double[][] Hz=soe.Hz(Global_data.simulationStepTime);
-            System.out.println("----------------------------------");
+            //Functions.printVector(Pz);
+            //System.out.println("----------------------------------");
             
             for(int k=0;k<iteration;k++){
                 System.out.println("Iteration nr :"+k);
@@ -58,9 +57,6 @@ public class Main {
                 System.out.println("--------------------");
             }
             
-         //}catch(Exception e){
-          //  System.out.println(e.getMessage());
-        // }
      }
 }     
 
